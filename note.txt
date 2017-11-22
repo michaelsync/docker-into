@@ -1,0 +1,225 @@
+
+
+
+https://blog.docker.com/2017/01/whats-new-in-docker-1-13/
+
+What is Docker? 
+ - An platform to develop, deploy, release
+ - isoloated env/own process space
+ - build once and run anywhere (reduce the compatibility on diff platforms) / configure once - run anything 
+ - container are lightweight 
+ - LXC (Linux containers) - an operation system level virtualzation method on single linux kernal 
+                          - namespace isolation ( processs trees, networking, user id and muonted system.
+
+Docker Stats
+
+cgroups is a Linux kernel feature that limits, accounts for, and isolates the resource usage (CPU, memory, disk I/O, network, etc.) of a collection of processes. Docker relies on cgroups to control and isolate resource limits.
+
+A Linux namespace is a Linux kernel feature that isolates and virtualizes system resources. Processes which restricted to a namespace can only interact with resources or processes that are part of the same namespace. Namespaces are an important part of Docker’s isolation model. Namespaces exist for each type of resource, including net (networking), mnt (storage), pid (processes), uts (hostname control), and user (UID mapping)
+
+Problems Solved.
+ - Differenet envi - setting. (you can debug it locally to replicate the issue )						  
+
+Docker contains ~ 
+ 1. Docker Enginee (client-server app. - Server - long running program called daemon process, REST API, Client is CLI)
+ 2. Image - read-only templte 
+ 3. DockerFile - text doc that containers all the commands 
+ 3. Container
+ 4. Repositoy/Hub 
+ 
+Docker Commands 
+- run
+- ps
+- stop/start/restart
+- build 
+- rm
+- rmi
+- logs 
+ 
+ 
+ 
+Visualization 
+ - Hyper-V
+ - Container Service
+
+Installers
+ - Docker for Windows
+ - Docker Toolbox 
+ 
+Dev machine
+ - Windows + Hyper V
+ - Windows + Virtual Tool box 
+ - Windows + Container Service
+ 
+Server
+ - Windows Server - Container Service
+ - Linux - Docker Enginee 
+ 
+ Containers vs VM
+ 
+ Namespace - Docker creates a set of namespaces for that container (PID, NET, IPC, MNT(Mounted Drive), UTS (Time Sharing))
+ Control Group - cgroups/control group 
+ 
+ Docker Compose
+ 
+ Demo 
+  - Web
+  - Go lang 
+  - DotNet Core
+  - Full framework dot net
+ 
+ Best practice
+ 
+ 
+ 1.
+ 
+ Why people car
+ ecosystem
+ use case
+ future
+ networking
+ open stack
+ 
+ Windows Server containers – multiple container instances can run concurrently on a host, with isolation provided through namespace, resource control, and process isolation technologies. Windows Server containers share the same kernel with the host, as well as each other.
+ 
+ Hyper-V containers – multiple container instances can run concurrently on a host; however, each container runs inside of a special virtual machine. This provides kernel level isolation between each Hyper-V container and the container host
+ 
+ docker run -it --isolation=hyperv microsoft/nanoserver cmd
+ 
+ Windows Containers can be created and managed through either Docker or Powershell. Containers created with PowerShell cannot currently be managed with Docker and visa versa.
+ 
+ Windows Server Core and Nanoserver
+ 
+ aspnet core - vs debugging is not supported yet https://github.com/Microsoft/DockerTools/issues/8 
+ 
+  4.6.1
+ 
+ Switch or Proxy 
+ - com.docker.proxy.exe (Linux: MobyLinuxVM, Windows Docker engine.)
+ Proxy process com.docker.proxy.exe which listens on the default named pipe //./pipe/docker_engine.
+
+If you switch from Linux to Windows the Windows Docker engine dockerd.exe will be started for you which is listening on another named pipe //./pipe/docker_engine_windows and a new started Proxy process redirects to this.
+
+& 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchDaemon
+
+https://blogs.msdn.microsoft.com/jcorioland/2016/05/31/create-and-run-hyper-v-containers-using-docker-on-windows-10-desktop/
+
+
+docker-compose -f "C:\MS\docker-into\aspnetfull\WebApplication1\docker-compose.yml" -f "C:\MS\docker-into\aspnetfull\WebApplication1\docker-compose.override.yml" -f "C:\MS\docker-into\aspnetfull\WebApplication1\obj\Docker\docker-compose.vs.debug.g.yml" -p dockercompose105858105808840710 config
+networks:
+  default:
+    external:
+      name: nat
+services:
+  webapplication1:
+    build:
+      args:
+        source: obj/Docker/empty/
+      context: C:\MS\docker-into\aspnetfull\WebApplication1\WebApplication1
+      dockerfile: Dockerfile
+    image: webapplication1:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.program: C:\app\bin/WebApplication1.dll
+      com.microsoft.visualstudio.debuggee.workingdirectory: C:\app
+    ports:
+    - 80/tcp
+    volumes:
+    - C:\MS\docker-into\aspnetfull\WebApplication1\WebApplication1:C:\inetpub\wwwroot:rw
+    - C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\Remote
+      Debugger:C:\remote_debugger:ro
+version: '3.0'
+docker  ps --filter "status=running" --filter "name=dockercompose105858105808840710_webapplication1_" --format {{.ID}} -n 1
+497646d860b3
+docker  inspect --format="{{.NetworkSettings.Networks.nat.IPAddress}}" 497646d860b3
+172.22.198.238
+docker  exec  497646d860b3 powershell -Command if ((Get-Process msvsmon -ErrorAction SilentlyContinue).Count -eq 0) {  Start-Process C:\remote_debugger\x64\msvsmon.exe -ArgumentList /noauth, /anyuser, /silent, /nostatus, /noclrwarn, /nosecuritywarn, /nofirewallwarn, /nowowwarn, /timeout:2147483646}
+Waiting for response from http://172.22.198.238/ ...
+Launching http://172.22.198.238/ ...
+
+
+
+Adoption Rate
+
+Datadog: (Docker adoption behivor, large company) https://www.datadoghq.com/docker-adoption/
+
+
+https://docs.docker.com/engine/userguide/eng-image/multistage-build/#use-multi-stage-builds
+
+
+
+
+Demo
+
+Linux Containers 
+----------------
+ - Shared Drive
+ - Daemon - outside access 
+
+Docker commands  
+
+docker images 
+docker ps -a 
+
+docker ps -a |  grep "pattern"
+
+Demo #1 - Node https://github.com/docker/labs/blob/master/developer-tools/nodejs-debugging/VSCode-README.md
+
+docker-compose up
+
+
+docker rm -f 
+docker rmi 
+
+docker log 
+
+docker cpu 
+
+docker push 
+docker pull (no demo - it will take time )
+
+node app.js
+
+
+oldstable = wheezy; stable = jessie; testing = stretch; unstable = sid
+
+
+
+
+Demo #2 - Go - Scenerio #2 - you don't have go in your local. We will think about CI and production images. 
+
+
+docker image build -t gorillademo:app .
+
+docker container run gorillademo:app bash -- Container will stop 
+
+docker container run --rm gorillademo:app bash  ## --rm 
+
+docker container run -it gorillademo:app /bin/bash   ## interactive 
+
+docker container run --rm -v //C/MS/docker-into/linux-container/go:/go/src/app -p 10010:10010 gorillademo:app go build
+
+docker container run --rm -v //C/MS/docker-into/linux-container/go:/go/src/app -p 10010:10010 gorillademo:app go test -v
+
+docker container run --name=gorillademo --rm -v //C/MS/docker-into/linux-container/go:/go/src/app -p 10010:10010 gorillademo:app ./app
+
+docker rm -f gorillademo
+
+docker exec -it bash 
+docker cp 
+docker link (maybe)
+dockerfile multi-stage 
+
+Demo #3 - DotNet Core - Linux - Visual Studio - 
+ - Docker tool supported
+ - debugging 
+ - docker compose 
+
+Windows Containers
+- Windows Container Service 
+- Switching the container 
+- No Shared drive 
+
+Demo #4 - Full DotNet Framework + Visual Studio + Debugging 
+ Note: Debugging DotNetCore with WIndows container is not working yet. 
+ 
+ Show a bit of commands like docker ps or docker images (to show the size )
