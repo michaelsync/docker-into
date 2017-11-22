@@ -12,8 +12,8 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", Hello)
 	http.Handle("/", r)
-	fmt.Println("Starting up on 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	fmt.Println("Starting up on 10010")
+	log.Fatal(http.ListenAndServe(":10010", nil))
 }
 
 func Hello(w http.ResponseWriter, req *http.Request) {

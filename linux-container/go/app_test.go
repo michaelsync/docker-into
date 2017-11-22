@@ -1,3 +1,5 @@
+package main
+
 import(
 	"testing"
 	. "github.com/smartystreets/goconvey/convey"
@@ -14,6 +16,10 @@ func TestSomething(t *testing.T) {
 	
 		Convey("myVar should not be nil", func() {
 			So(myVar, ShouldNotBeNil)
+		})
+
+		Convey("This test should be failed", func() {
+			So(myVar, ShouldBeNil)
 		})
 	})
 	
